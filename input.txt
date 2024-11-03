@@ -1,1 +1,14 @@
-for (y = 1; y <= 5) { put y; }
+function convert (fahr integer)
+{
+return 5 * (fahr -32) / 9;
+}
+@
+integer low, high, step;
+get (low, high, step);
+while (low <= high )
+{ put (low);
+put (convert (low));
+low = low + step;
+}
+@
+2

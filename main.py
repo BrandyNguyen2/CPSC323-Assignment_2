@@ -74,7 +74,7 @@ first_index = None
 last_index = None
 for i in range(len(tokens)):
      if tokens[i] == "[" and tokens[i+1] == "*":
-          print ("Found comment" + tokens[i] + tokens[i+1] )
+          #print ("Found comment" + tokens[i] + tokens[i+1] )
           first_index = i
      elif tokens[i] == "*" and tokens[i+1] == "]":
           last_index = i + 1
@@ -174,16 +174,17 @@ switch = True
 
 tokens_index = 0
 
-def token():
-    if tokens_index <len(tokens):
-        return tokens[tokens_index]
+token = tokens[tokens_index]
 
 def lexer():
     global tokens_index
     tokens_index += 1
-  
+    if tokens_index <len(tokens):
+        token = tokens[tokens_index]
 
-
+#for i in range (len(tokens)):
+#    print (tokens[i])
+#    lexer()
 
 # Rules
 
@@ -192,19 +193,49 @@ switch = True
 def Rat24F():
     if switch:
         print("Rat24F")
+    lexer()
+
+    OptFunctionDefinitions()
+    if token == "@":
+        lexer()
+        OptDeclarationList()
+        StatementList()
+        if token == "@":
+            lexer()
+        else:
+            print("Error, expected @ at end of statement")
+
+
 
 def OptFunctionDefinitions():
     if switch:
         print("OptFunctionDefinitions")
+        if token == "function":
+            lexer()
+            FunctionDefinitions()
 
 def FunctionDefinitions():
     if switch:
         print("FunctionDefinitions")
+    Function()
+    if token == "function":
+        FunctionDefinitions
 
 
 def Function():
     if switch:
         print("Function")
+    if token == 'function':
+        lexer()
+        if isIdentifier(token):
+            lexer()
+            if token == '(':
+                lexer()
+                OptParameterList()
+                if token == ')':
+                    lexer()
+                    OptDeclarationList()
+                    Body()
 
 def OptParameterList():
     if switch:
@@ -308,3 +339,6 @@ def Primary():
 def Empty():
     if switch:
         print("Empty")
+
+
+Rat24F()
