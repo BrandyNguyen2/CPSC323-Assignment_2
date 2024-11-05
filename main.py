@@ -1,7 +1,7 @@
 # Programmers: Salvador Delgado, Brandy Nguyen, Landon Patam, & Nicholas Reeves
 
 # Lists of Seperators, Operators and Keywords for later reference
-separators = ["(", ")", ";", "{", "}", "[", "]", ","]
+separators = ["(", ")", ";", "{", "}", "[", "]", ",", "@"]
 operators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", ">=", "<=", "and", "or", "not"]
 keywords = ["while", "if", "for", "fi", "Integer", "Boolean", "Real", "integer", "boolean", "real", "put", "function", "return", "get", "true", "false", "else", "elif", "main"]
 
