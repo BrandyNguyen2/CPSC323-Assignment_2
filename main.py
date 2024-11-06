@@ -180,7 +180,7 @@ tokens_index = 0
 token = tokens[tokens_index]
 
 def lexer():
-    global tokens_index
+    global tokens_index, token
     tokens_index += 1
     if tokens_index < len(tokens):
         token = tokens[tokens_index]
@@ -193,10 +193,12 @@ def lexer():
 
 switch = True
 
+
+
+
 def Rat24F():
     if switch:
         print("Rat24F")
-    lexer()
 
     OptFunctionDefinitions()
     if token == "@":
@@ -214,15 +216,20 @@ def OptFunctionDefinitions():
     if switch:
         print("OptFunctionDefinitions")
         if token == "function":
-            lexer()
             FunctionDefinitions()
 
 def FunctionDefinitions():
     if switch:
         print("FunctionDefinitions")
     Function()
+    FunctionDefinitions_prime()
+
+
+def FunctionDefinitions_prime():
+    if switch:
+        print("FunctionDefinitions_prime")
     if token == "function":
-        FunctionDefinitions
+        FunctionDefinitions()
 
 
 def Function():
@@ -243,18 +250,34 @@ def Function():
 def OptParameterList():
     if switch:
         print("OptParameterList")
+    if isIdentifier(token):
+        ParameterList()
 
 def ParameterList():
     if switch:
         print("ParameterList")
+    Parameter()
+    ParameterListPrime()
+
+def ParameterListPrime():
+    if switch:
+        print("ParameterListPrime")
+    if token == ",":
+        lexer()
+        ParameterList()
 
 def Parameter():
     if switch:
         print("Parameter")
+    if isIdentifier(token):
+        IDs()
+        Qualifier()
 
 def Qualifier():
     if switch:
         print("Qualifier")
+    if (isInteger(token) or isReal(token) or (isinstance(token, bool))):
+        lexer()
 
 def Body():
     if switch:
@@ -268,6 +291,10 @@ def DeclarationList():
     if switch:
         print("DeclarationList")
 
+def DeclarationList_prime():
+    if switch:
+        print("DeclarationList_prime")
+
 
 def Declaration():
     if switch:
@@ -277,10 +304,18 @@ def IDs():
     if switch:
         print("IDs")
 
+def IDs_prime():
+    if switch:
+        print("IDs_prime")
+
 
 def StatementList():
     if switch:
         print("StatementList")
+
+def StatementList_prime():
+    if switch:
+        print("StatementList_prime")
 
 
 def Statement():
@@ -299,9 +334,17 @@ def If():
     if switch:
         print("If")
 
+def If_prime():
+    if switch:
+        print("If_prime")
+
 def Return():
     if switch:
         print("Return")
+
+def Return_prime():
+    if switch:
+        print("Return_prime")
 
 def Print():
     if switch:
