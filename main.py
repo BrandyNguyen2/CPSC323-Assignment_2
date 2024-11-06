@@ -198,7 +198,7 @@ switch = True
 
 def Rat24F():
     if switch:
-        print("Rat24F")
+        print(token + " " + "Rat24F")
 
     OptFunctionDefinitions()
     if token == "@":
@@ -214,27 +214,27 @@ def Rat24F():
 
 def OptFunctionDefinitions():
     if switch:
-        print("OptFunctionDefinitions")
+        print(token + " " + "OptFunctionDefinitions")
         if token == "function":
             FunctionDefinitions()
 
 def FunctionDefinitions():
     if switch:
-        print("FunctionDefinitions")
+        print(token + " " + "FunctionDefinitions")
     Function()
     FunctionDefinitions_prime()
 
 
 def FunctionDefinitions_prime():
     if switch:
-        print("FunctionDefinitions_prime")
+        print(token + " " + "FunctionDefinitions_prime")
     if token == "function":
         FunctionDefinitions()
 
 
 def Function():
     if switch:
-        print("Function")
+        print(token + " " + "Function")
     if token == 'function':
         lexer()
         if isIdentifier(token):
@@ -249,90 +249,114 @@ def Function():
 
 def OptParameterList():
     if switch:
-        print("OptParameterList")
+        print(token + " " + "OptParameterList")
     if isIdentifier(token):
         ParameterList()
 
 def ParameterList():
     if switch:
-        print("ParameterList")
+        print(token + " " + "ParameterList")
     Parameter()
     ParameterListPrime()
 
 def ParameterListPrime():
     if switch:
-        print("ParameterListPrime")
+        print(token + " " + "ParameterListPrime")
     if token == ",":
         lexer()
         ParameterList()
 
 def Parameter():
     if switch:
-        print("Parameter")
+        print(token + " " + "Parameter")
     if isIdentifier(token):
         IDs()
         Qualifier()
 
 def Qualifier():
     if switch:
-        print("Qualifier")
+        print(token + " " + "Qualifier")
     if (isInteger(token) or isReal(token) or (isinstance(token, bool))):
         lexer()
 
 def Body():
     if switch:
-        print("Body")
+        print(token + " " + "Body")
 
 def OptDeclarationList():
     if switch:
-        print("OptDeclarationList")
+        print(token + " " + "OptDeclarationList")
 
 def DeclarationList():
     if switch:
-        print("DeclarationList")
+        print(token + " " + "DeclarationList")
 
 def DeclarationList_prime():
     if switch:
-        print("DeclarationList_prime")
+        print(token + " " + "DeclarationList_prime")
 
 
 def Declaration():
     if switch:
-        print("Declaration")
+        print(token + " " + "Declaration")
 
 def IDs():
     if switch:
-        print("IDs")
+        print(token + " " + "IDs")
 
 def IDs_prime():
     if switch:
-        print("IDs_prime")
+        print(token + " " + "IDs_prime")
 
 
 def StatementList():
     if switch:
-        print("StatementList")
+        print(token + " " + "StatementList")
+    Statement()
+    StatementList_prime()
 
 def StatementList_prime():
     if switch:
-        print("StatementList_prime")
-
+        print(token + " " + "StatementList_prime")
+        if token in {"if", "return", "put", "get", "while"}:
+            StatementList()
 
 def Statement():
     if switch:
-        print("Statement")
+        print(token + " " + "Statement")
+        if token == '{':
+            Compound()
+        elif isIdentifier(token):
+            Assign()
+        elif token == 'if':
+            If()
+        elif token == 'return':
+            Return()
+        elif token == 'put':
+            Print()
+        elif token == 'get':
+            Scan()
+        elif token == 'while':
+            While()
 
 def Compound():
     if switch:
-        print("Compound")
+        print(token + " " + "Compound")
 
 def Assign():
     if switch:
-        print("Assign")
+        print(token + " " + "Assign")
+    if isIdentifier(token):
+        lexer()
+        if token == '=':
+            lexer()
+            Expression()
+            if token == ';':
+                lexer()
 
 def If():
     if switch:
-        print("If")
+        print(token + " " + "If")
 
 def If_prime():
     if switch:
@@ -368,7 +392,7 @@ def Relop():
 
 def Expression():
     if switch:
-        print("Expression")
+        print(token + " " + "Expression")
 
 def Term():
     if switch:
