@@ -357,6 +357,20 @@ def Assign():
 def If():
     if switch:
         print(token + " " + "If")
+    if token == "if":
+        lexer()
+        if token == "(":
+            lexer()
+            Condition()
+            if token == ")":
+                lexer()
+                Statement()
+                If_prime()
+            else:
+                print("Error: Expected ')' at end of condition in if statement")
+        else:
+            print("Error: Expected '(' after 'if'")
+
 
 def If_prime():
     if switch:
@@ -393,14 +407,46 @@ def Relop():
 def Expression():
     if switch:
         print(token + " " + "Expression")
+    Term()  # Start by parsing a term
+    ExpressionPrime()  # Handle additional terms (if any) via ExpressionPrime
+
+def ExpressionPrime():
+    if switch:
+        print(token + " " + "ExpressionPrime")
+    if token == "+":  # Check for addition operator
+        lexer()  # Move to the next token
+        Term()  # Parse the next term after '+'
+        ExpressionPrime()  # Recur to handle more additions if present
+    # If token is not '+', we assume epsilon (no further action needed)
 
 def Term():
     if switch:
-        print("Term")
+        print(token + " " + "Term")
+    Factor()  # Start by parsing a factor
+    TermPrime()  # Handle further multiplication or division (if needed)
+
+def TermPrime():
+    if switch:
+        print(token + " " + "TermPrime")
+    # Here you could handle other operators like *, /
+    # For addition, only use ExpressionPrime, not TermPrime
 
 def Factor():
     if switch:
-        print("Factor")
+        print(token + " " + "Factor")
+    # Factor could be an integer, identifier, or nested expression
+    if isInteger(token) or isIdentifier(token):
+        lexer()  # Move past the integer or identifier token
+    elif token == "(":  # Handle parentheses
+        lexer()  # Consume '('
+        Expression()  # Recursively parse the expression inside parentheses
+        if token == ")":
+            lexer()  # Consume ')'
+        else:
+            print("Error: Expected ')' after expression")
+    else:
+        print("Error: Unexpected token in Factor")
+
 
 def Primary():
     if switch:
