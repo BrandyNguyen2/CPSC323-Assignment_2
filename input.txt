@@ -1,3 +1,7 @@
+function convert (fahr integer)
+{
+return 5 * (fahr -32) + 5
+}
 @
-a = b + c;
+while (fahr <= upper) a = 23.00;
 @

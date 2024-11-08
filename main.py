@@ -247,7 +247,7 @@ def OptFunctionDefinitions():
         if token == "function":
             FunctionDefinitions()
         else:
-            return
+            FunctionDefinitions()
 
 def FunctionDefinitions():
     if switch:
@@ -285,7 +285,7 @@ def OptParameterList():
     if switch:
         print(token + " " + "OptParameterList")
         rules_used.append("OptParamaterList")
-    if isIdentifier(token):
+    #if isIdentifier(token):
         ParameterList()
 
 def ParameterList():
@@ -322,6 +322,12 @@ def Body():
     if switch:
         print(token + " " + "Body")
         rules_used.append("Body")
+        if token == "{":
+            lexer()
+            StatementList()
+            if token == "}":
+                 lexer()
+            
 
 def OptDeclarationList():
     if switch:
@@ -348,11 +354,16 @@ def IDs():
     if switch:
         print(token + " " + "IDs")
         rules_used.append("IDs")
+    if isIdentifier(token):
+        lexer()
+        IDs_prime()
 
 def IDs_prime():
     if switch:
         print(token + " " + "IDs_prime")
         rules_used.append("IDs_prime")
+    IDs()
+    
 
 
 def StatementList():
@@ -367,6 +378,7 @@ def StatementList_prime():
         print(token + " " + "StatementList_prime")
         rules_used.append("StatementList_prime")
         if token in {"if", "return", "put", "get", "while"}:
+            lexer()
             StatementList()
 
 def Statement():
@@ -375,8 +387,6 @@ def Statement():
         rules_used.append("Statement")
         if token == '{':
             Compound()
-        elif isIdentifier(token):
-            Assign()
         elif token == 'if':
             If()
         elif token == 'return':
@@ -387,6 +397,8 @@ def Statement():
             Scan()
         elif token == 'while':
             While()
+        elif isIdentifier(token):
+            Assign()
 
 def Compound():
     if switch:
@@ -433,72 +445,165 @@ def Return():
     if switch:
         print("Return")
         rules_used.append("Return")
+        if token == "return":
+             lexer()
+             if token == ";":
+                  lexer()
+             else:
+                  Expression()
 
 def Return_prime():
     if switch:
         print("Return_prime")
         rules_used.append("Return_prime")
+    if token == ";":
+         lexer()
+    else:
+         Expression()
+         if token == ";":
+            lexer()
 
 def Print():
     if switch:
         print("Print")
         rules_used.append("Print")
+    if token == "put":
+         lexer()
+         if token == "(":
+              lexer()
+              Expression()
+              if token == ")":
+                   lexer()
+                   if token == ";":
+                        lexer()
 
 def Scan():
     if switch:
         print("Scan")
         rules_used.append("Scan")
+    if token == "get":
+         lexer()
+         if token == "(":
+              IDs()
+              if token == ")":
+                   lexer()
+                   if token == ";":
+                       lexer()
 
 def While():
     if switch:
         print("While")
         rules_used.append("While")
+    if token == "while":
+         lexer()
+         if token == "(":
+              lexer()
+              Condition()
+              if token == ")":
+                   lexer()
+                   Statement()
 
 def Condition():
     if switch:
         print("Condition")
         rules_used.append("Condition")
+    Expression()
+    Relop()
+    Expression()
 
 def Relop():
     if switch:
         print("Relop")
         rules_used.append("Relop")
+        if token == "==":
+             lexer()
+        elif token == "!=":
+             lexer()
+        elif token =="<":
+             lexer()
+        elif token == ">":
+             lexer()
+        elif token == "<=":
+             lexer()
+        elif token == "=>":
+             lexer()
+
 
 def Expression():
     if switch:
         print(token + " " + "Expression")
         rules_used.append("Expression")
+    Term()
+    ExpressionPrime()
+
+
+    """
     Term()  # Start by parsing a term
     ExpressionPrime()  # Handle additional terms (if any) via ExpressionPrime
+    """
 
 def ExpressionPrime():
     if switch:
         print(token + " " + "ExpressionPrime")
         rules_used.append("ExpressionPrime")
+    if token == "+":
+         lexer()
+         Term()
+         ExpressionPrime()
+    elif token == "-":
+         lexer()
+         Term()
+         ExpressionPrime()
+    else:
+         Term()
+
+
+    """
     if token == "+":  # Check for addition operator
         lexer()  # Move to the next token
         Term()  # Parse the next term after '+'
         ExpressionPrime()  # Recur to handle more additions if present
     # If token is not '+', we assume epsilon (no further action needed)
+    """
 
 def Term():
     if switch:
         print(token + " " + "Term")
         rules_used.append("Term")
+
+    Factor()
+    TermPrime()
+    
+    """    
     Factor()  # Start by parsing a factor
     TermPrime()  # Handle further multiplication or division (if needed)
+    """
 
 def TermPrime():
     if switch:
         print(token + " " + "TermPrime")
-    # Here you could handle other operators like *, /
-    # For addition, only use ExpressionPrime, not TermPrime
+    if token == "*":
+         lexer()
+         Factor()
+         TermPrime()
+    elif token == "/":
+         lexer()
+         Factor()
+         TermPrime()
+
 
 def Factor():
     if switch:
         print(token + " " + "Factor")
         rules_used.append("Factor")
-    # Factor could be an integer, identifier, or nested expression
+
+    if token == "-":
+         lexer()
+         Primary()
+    else:
+         Primary()
+
+    """# Factor could be an integer, identifier, or nested expression
     if isInteger(token) or isIdentifier(token):
         lexer()  # Move past the integer or identifier token
     elif token == "(":  # Handle parentheses
@@ -510,11 +615,32 @@ def Factor():
             print("Error: Expected ')' after expression")
     else:
         print("Error: Unexpected token in Factor")
+        """
 
 
 def Primary():
     if switch:
         print("Primary")
+    if isIdentifier(token):
+         lexer()
+         if token == "(":
+              IDs()
+              if token == ")":
+                   lexer()
+    elif isInteger(token):
+         lexer()
+    elif token == "(":
+         lexer()
+         Expression()
+         if token == ")":
+              lexer()
+    elif isReal(token):
+         lexer()
+    elif token == "true":
+         lexer()
+    elif token == "false":
+         lexer()
+
 
 def Empty():
     if switch:
