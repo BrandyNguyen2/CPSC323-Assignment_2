@@ -204,7 +204,7 @@ def lexer():
 
 
 
-        file.write(f"{token_type:<22}{token:<20}{', '.join(rules_used)}\n")
+        file.write(f"{token_type:<22}{token:<23}{', '.join(rules_used)}\n")
         rules_used = []
         tokens_index += 1
         if tokens_index < len(tokens):
