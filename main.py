@@ -392,8 +392,8 @@ def StatementList_prime():
     if switch:
         print(token + " " + "StatementList_prime")
         rules_used.append("StatementList_prime")
-        if token in {"if", "return", "put", "get", "while"}:
-            lexer()
+        if token in {"if", "return", "put", "get", "while"} or isIdentifier(token):
+            #lexer()
             StatementList()
 
 def Statement():
@@ -419,6 +419,11 @@ def Compound():
     if switch:
         print(token + " " + "Compound")
         rules_used.append("Compound")
+        if token == "{":
+             lexer()
+             StatementList()
+             if token == "}":
+                  lexer()
 
 def Assign():
     if switch:
@@ -501,6 +506,7 @@ def Scan():
     if token == "get":
          lexer()
          if token == "(":
+              lexer()
               IDs()
               if token == ")":
                    lexer()

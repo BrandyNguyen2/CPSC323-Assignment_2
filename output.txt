@@ -16,8 +16,8 @@ Identifier            fahr                   Expression, Term, Factor, Primary
 Operator              -                      ExpressionPrime
 Integer               32                     Term, Factor, Primary
 Separator             )                      ExpressionPrime, Term, Factor, Primary
-Operator              +                      ExpressionPrime
-Integer               5                      Term, Factor, Primary
+Operator              /                      
+Integer               9                      Factor, Primary
 Separator             ;                      ExpressionPrime, Term, Factor, Primary
 Separator             }                      StatementList_prime
 Separator             @                      FunctionsDefintions_prime
@@ -28,14 +28,40 @@ Identifier            high                   IDs
 Separator             ,                      IDs_prime
 Identifier            step                   IDs
 Separator             ;                      IDs_prime, IDs
-Keyword               while                  DeclarationList_prime, StatementList, Statement, While
+Keyword               get                    DeclarationList_prime, StatementList, Statement, Scan
 Separator             (                      
-Identifier            fahr                   Condition, Expression, Term, Factor, Primary
+Identifier            low                    IDs
+Separator             ,                      IDs_prime
+Identifier            high                   IDs
+Separator             ,                      IDs_prime
+Identifier            step                   IDs
+Separator             )                      IDs_prime, IDs
+Separator             ;                      
+Keyword               while                  StatementList_prime, StatementList, Statement, While
+Separator             (                      
+Identifier            low                    Condition, Expression, Term, Factor, Primary
 Operator              <=                     ExpressionPrime, Term, Factor, Primary, Relop
-Identifier            upper                  Expression, Term, Factor, Primary
+Identifier            high                   Expression, Term, Factor, Primary
 Separator             )                      ExpressionPrime, Term, Factor, Primary
-Identifier            a                      Statement, Assign
+Separator             {                      Statement, Compound
+Keyword               put                    StatementList, Statement, Print
+Separator             (                      
+Identifier            low                    Expression, Term, Factor, Primary
+Separator             )                      ExpressionPrime, Term, Factor, Primary
+Separator             ;                      
+Keyword               put                    StatementList_prime, StatementList, Statement, Print
+Separator             (                      
+Identifier            convert                Expression, Term, Factor, Primary
+Separator             (                      IDs, ExpressionPrime, Term, Factor, Primary
+Identifier            low                    Expression, Term, Factor, Primary
+Separator             )                      ExpressionPrime, Term, Factor, Primary
+Separator             )                      
+Separator             ;                      
+Identifier            low                    StatementList_prime, StatementList, Statement, Assign
 Operator              =                      
-Real                  23.00                  Expression, Term, Factor, Primary
+Identifier            low                    Expression, Term, Factor, Primary
+Operator              +                      ExpressionPrime
+Identifier            step                   Term, Factor, Primary
 Separator             ;                      ExpressionPrime, Term, Factor, Primary
+Separator             }                      StatementList_prime
 Separator             @                      StatementList_prime
