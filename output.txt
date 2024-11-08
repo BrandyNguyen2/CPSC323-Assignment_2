@@ -1,0 +1,11 @@
+Output:
+Token                 Lexeme                 Production Rules
+---------             --------               --------------------
+Separator                @                   Rat24F, OptFunctionsDefinitions
+Identifier               a                   OptDeclarationList, StatementList, Statement, Assign
+Operator                 =                   
+Identifier               b                   Expression, Term, Factor
+Operator                 +                   ExpressionPrime
+Identifier               c                   Term, Factor
+Separator                ;                   ExpressionPrime
+Separator                @                   StatementList_prime

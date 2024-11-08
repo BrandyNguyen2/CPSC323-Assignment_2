@@ -173,17 +173,44 @@ def isIdentifier(token):
 
 # SYNTACTICAL ANALYZER PORTION
 
+with open ("output.txt", "w") as file:
+        file.write(f'Output:\nToken{" "*17}{"Lexeme":<23}{"Production Rules"}\n{"-"*9}{" "*13}{"-"*8}{" "*15}{"-"*20}\n')
+
 switch = True
 
 tokens_index = 0
 
 token = tokens[tokens_index]
+rules_used = []
 
 def lexer():
-    global tokens_index, token
-    tokens_index += 1
-    if tokens_index < len(tokens):
-        token = tokens[tokens_index]
+    global tokens_index, token, rules_used
+    token_type = ""
+    if token in operators:
+          token_type ='Operator' 
+    elif token in separators:
+                token_type = 'Separator'
+    elif token in keywords:
+                token_type = 'Keyword'
+    elif isReal(token):
+                token_type = 'Real'
+    elif isInteger(token):
+                token_type = 'Integer'
+    elif isIdentifier(token):
+                token_type = 'Identifier'
+    else:
+                token_type = 'Unknown'
+    with open("output.txt", "a") as file:
+
+
+
+        file.write(f"{token_type:<25}{token:<20}{', '.join(rules_used)}\n")
+        rules_used = []
+        tokens_index += 1
+        if tokens_index < len(tokens):
+            token = tokens[tokens_index]
+
+    
 
 # for i in range (len(tokens)):
 #    print (tokens[i])
@@ -199,6 +226,7 @@ switch = True
 def Rat24F():
     if switch:
         print(token + " " + "Rat24F")
+        rules_used.append("Rat24F")
 
     OptFunctionDefinitions()
     if token == "@":
@@ -215,12 +243,16 @@ def Rat24F():
 def OptFunctionDefinitions():
     if switch:
         print(token + " " + "OptFunctionDefinitions")
+        rules_used.append("OptFunctionsDefinitions")
         if token == "function":
             FunctionDefinitions()
+        else:
+            return
 
 def FunctionDefinitions():
     if switch:
         print(token + " " + "FunctionDefinitions")
+        rules_used.append("FunctionsDefinitions")
     Function()
     FunctionDefinitions_prime()
 
@@ -228,6 +260,7 @@ def FunctionDefinitions():
 def FunctionDefinitions_prime():
     if switch:
         print(token + " " + "FunctionDefinitions_prime")
+        rules_used.append("FunctionsDefintions_prime")
     if token == "function":
         FunctionDefinitions()
 
@@ -235,6 +268,7 @@ def FunctionDefinitions_prime():
 def Function():
     if switch:
         print(token + " " + "Function")
+        rules_used.append("Function")
     if token == 'function':
         lexer()
         if isIdentifier(token):
@@ -250,18 +284,21 @@ def Function():
 def OptParameterList():
     if switch:
         print(token + " " + "OptParameterList")
+        rules_used.append("OptParamaterList")
     if isIdentifier(token):
         ParameterList()
 
 def ParameterList():
     if switch:
         print(token + " " + "ParameterList")
+        rules_used.append("ParamaterList")
     Parameter()
     ParameterListPrime()
 
 def ParameterListPrime():
     if switch:
         print(token + " " + "ParameterListPrime")
+        rules_used.append("ParamaterListPrime")
     if token == ",":
         lexer()
         ParameterList()
@@ -269,6 +306,7 @@ def ParameterListPrime():
 def Parameter():
     if switch:
         print(token + " " + "Parameter")
+        rules_used.append("Paramater")
     if isIdentifier(token):
         IDs()
         Qualifier()
@@ -276,54 +314,65 @@ def Parameter():
 def Qualifier():
     if switch:
         print(token + " " + "Qualifier")
+        rules_used.append("Qualifier")
     if (isInteger(token) or isReal(token) or (isinstance(token, bool))):
         lexer()
 
 def Body():
     if switch:
         print(token + " " + "Body")
+        rules_used.append("Body")
 
 def OptDeclarationList():
     if switch:
         print(token + " " + "OptDeclarationList")
+        rules_used.append("OptDeclarationList")
 
 def DeclarationList():
     if switch:
         print(token + " " + "DeclarationList")
+        rules_used.append("DeclarationList")
 
 def DeclarationList_prime():
     if switch:
         print(token + " " + "DeclarationList_prime")
+        rules_used.append("DeclarationList_prime")
 
 
 def Declaration():
     if switch:
         print(token + " " + "Declaration")
+        rules_used.append("Declaration")
 
 def IDs():
     if switch:
         print(token + " " + "IDs")
+        rules_used.append("IDs")
 
 def IDs_prime():
     if switch:
         print(token + " " + "IDs_prime")
+        rules_used.append("IDs_prime")
 
 
 def StatementList():
     if switch:
         print(token + " " + "StatementList")
+        rules_used.append("StatementList")
     Statement()
     StatementList_prime()
 
 def StatementList_prime():
     if switch:
         print(token + " " + "StatementList_prime")
+        rules_used.append("StatementList_prime")
         if token in {"if", "return", "put", "get", "while"}:
             StatementList()
 
 def Statement():
     if switch:
         print(token + " " + "Statement")
+        rules_used.append("Statement")
         if token == '{':
             Compound()
         elif isIdentifier(token):
@@ -342,10 +391,12 @@ def Statement():
 def Compound():
     if switch:
         print(token + " " + "Compound")
+        rules_used.append("Compound")
 
 def Assign():
     if switch:
         print(token + " " + "Assign")
+        rules_used.append("Assign")
     if isIdentifier(token):
         lexer()
         if token == '=':
@@ -357,6 +408,7 @@ def Assign():
 def If():
     if switch:
         print(token + " " + "If")
+        rules_used.append("If")
     if token == "if":
         lexer()
         if token == "(":
@@ -375,44 +427,54 @@ def If():
 def If_prime():
     if switch:
         print("If_prime")
+        rules_used.append("If_prime")
 
 def Return():
     if switch:
         print("Return")
+        rules_used.append("Return")
 
 def Return_prime():
     if switch:
         print("Return_prime")
+        rules_used.append("Return_prime")
 
 def Print():
     if switch:
         print("Print")
+        rules_used.append("Print")
 
 def Scan():
     if switch:
         print("Scan")
+        rules_used.append("Scan")
 
 def While():
     if switch:
         print("While")
+        rules_used.append("While")
 
 def Condition():
     if switch:
         print("Condition")
+        rules_used.append("Condition")
 
 def Relop():
     if switch:
         print("Relop")
+        rules_used.append("Relop")
 
 def Expression():
     if switch:
         print(token + " " + "Expression")
+        rules_used.append("Expression")
     Term()  # Start by parsing a term
     ExpressionPrime()  # Handle additional terms (if any) via ExpressionPrime
 
 def ExpressionPrime():
     if switch:
         print(token + " " + "ExpressionPrime")
+        rules_used.append("ExpressionPrime")
     if token == "+":  # Check for addition operator
         lexer()  # Move to the next token
         Term()  # Parse the next term after '+'
@@ -422,6 +484,7 @@ def ExpressionPrime():
 def Term():
     if switch:
         print(token + " " + "Term")
+        rules_used.append("Term")
     Factor()  # Start by parsing a factor
     TermPrime()  # Handle further multiplication or division (if needed)
 
@@ -434,6 +497,7 @@ def TermPrime():
 def Factor():
     if switch:
         print(token + " " + "Factor")
+        rules_used.append("Factor")
     # Factor could be an integer, identifier, or nested expression
     if isInteger(token) or isIdentifier(token):
         lexer()  # Move past the integer or identifier token
