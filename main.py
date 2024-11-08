@@ -11,8 +11,10 @@ with open("input.txt", "r" ) as file:
 
 
 
+
 # Removes comments from the input string
 input = re.sub(r"\[\*.*?\*\]", "", input)
+
 
 # Instantiating list for Tokens
 tokens = []
@@ -33,6 +35,7 @@ for j in range(len(input)):
     elif i == "\n":
          tokens.append(temp_token)
          temp_token = ""
+         tokens.append("\n")
     elif i == " ":
          tokens.append(temp_token)
          temp_token = ""
@@ -42,6 +45,7 @@ for j in range(len(input)):
 
 # Removes spaces and empty tokens from list
 tokens = [i for i in tokens if i != "" and i != " "]
+
 
 # Deals with edge cases of "<" and ">" followed by "="
 index = 0
@@ -73,7 +77,6 @@ while index < len(tokens):
 
 # Removes comments from the tokens list
 
-#print(tokens)
 
 first_index = None
 last_index = None
@@ -85,6 +88,15 @@ for i in range(len(tokens)):
           last_index = i + 1
 if first_index != None and last_index != None:
      del tokens[first_index: last_index+1]
+
+
+
+if tokens[0] == "\n":
+     del tokens[0]
+
+
+#print(tokens)
+
 
 # FSM for Integer
 def isInteger(token):
@@ -181,14 +193,18 @@ with open ("output.txt", "w") as file:
 switch = True
 
 tokens_index = 0
-
+line_number = 1
 token = tokens[tokens_index]
 rules_used = []
 errors = []
 
 def lexer():
-    global tokens_index, token, rules_used
+    global tokens_index, token, rules_used, line_number
     token_type = ""
+
+
+
+
     if token in operators:
           token_type ='Operator' 
     elif token in separators:
@@ -212,19 +228,19 @@ def lexer():
             if tokens_index < len(tokens):
                 token = tokens[tokens_index]
 
-    
+    if token == "\n":
+        tokens_index += 1
+        token = tokens[tokens_index]
+        line_number += 1
 
-# for i in range (len(tokens)):
-#    print (tokens[i])
-#    lexer()
 
-# Rules
+
 
 switch = True
 
 def Error():
      with open("output.txt", "a") as file:
-          file.write(f"{errors[0]}")
+          file.write(f"\nERROR ON LINE {line_number} - {errors[0]}")
 
 
 def Rat24F():
