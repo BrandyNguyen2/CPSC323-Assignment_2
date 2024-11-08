@@ -182,6 +182,7 @@ tokens_index = 0
 
 token = tokens[tokens_index]
 rules_used = []
+errors = []
 
 def lexer():
     global tokens_index, token, rules_used
@@ -235,8 +236,6 @@ def Rat24F():
         StatementList()
         if token == "@":
             lexer()
-        else:
-            print("Error, expected @ at end of statement")
 
 
 
@@ -285,7 +284,6 @@ def OptParameterList():
     if switch:
         print(token + " " + "OptParameterList")
         rules_used.append("OptParamaterList")
-    #if isIdentifier(token):
         ParameterList()
 
 def ParameterList():
@@ -302,6 +300,7 @@ def ParameterListPrime():
     if token == ",":
         lexer()
         ParameterList()
+  
 
 def Parameter():
     if switch:
@@ -310,6 +309,7 @@ def Parameter():
     if isIdentifier(token):
         IDs()
         Qualifier()
+  
 
 def Qualifier():
     if switch:
@@ -451,6 +451,8 @@ def Return():
                   lexer()
              else:
                   Expression()
+                  if token == ";":
+                       lexer()
 
 def Return_prime():
     if switch:
@@ -537,11 +539,6 @@ def Expression():
     ExpressionPrime()
 
 
-    """
-    Term()  # Start by parsing a term
-    ExpressionPrime()  # Handle additional terms (if any) via ExpressionPrime
-    """
-
 def ExpressionPrime():
     if switch:
         print(token + " " + "ExpressionPrime")
@@ -558,13 +555,6 @@ def ExpressionPrime():
          Term()
 
 
-    """
-    if token == "+":  # Check for addition operator
-        lexer()  # Move to the next token
-        Term()  # Parse the next term after '+'
-        ExpressionPrime()  # Recur to handle more additions if present
-    # If token is not '+', we assume epsilon (no further action needed)
-    """
 
 def Term():
     if switch:
@@ -574,10 +564,6 @@ def Term():
     Factor()
     TermPrime()
     
-    """    
-    Factor()  # Start by parsing a factor
-    TermPrime()  # Handle further multiplication or division (if needed)
-    """
 
 def TermPrime():
     if switch:
@@ -603,19 +589,6 @@ def Factor():
     else:
          Primary()
 
-    """# Factor could be an integer, identifier, or nested expression
-    if isInteger(token) or isIdentifier(token):
-        lexer()  # Move past the integer or identifier token
-    elif token == "(":  # Handle parentheses
-        lexer()  # Consume '('
-        Expression()  # Recursively parse the expression inside parentheses
-        if token == ")":
-            lexer()  # Consume ')'
-        else:
-            print("Error: Expected ')' after expression")
-    else:
-        print("Error: Unexpected token in Factor")
-        """
 
 
 def Primary():

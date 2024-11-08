@@ -18,7 +18,8 @@ Integer               32                     Term, Factor, Primary
 Separator             )                      ExpressionPrime, Term, Factor, Primary
 Operator              +                      ExpressionPrime
 Integer               5                      Term, Factor, Primary
-Separator             }                      ExpressionPrime, Term, Factor, Primary, StatementList_prime
+Separator             ;                      ExpressionPrime, Term, Factor, Primary
+Separator             }                      StatementList_prime
 Separator             @                      FunctionsDefintions_prime
 Keyword               while                  OptDeclarationList, StatementList, Statement, While
 Separator             (                      
