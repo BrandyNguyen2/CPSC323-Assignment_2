@@ -21,7 +21,14 @@ Integer               5                      Term, Factor, Primary
 Separator             ;                      ExpressionPrime, Term, Factor, Primary
 Separator             }                      StatementList_prime
 Separator             @                      FunctionsDefintions_prime
-Keyword               while                  OptDeclarationList, StatementList, Statement, While
+Keyword               integer                OptDeclarationList, DeclarationList, Declaration, Qualifier, IDs
+Identifier            low                    IDs_prime, IDs
+Separator             ,                      IDs_prime
+Identifier            high                   IDs
+Separator             ,                      IDs_prime
+Identifier            step                   IDs
+Separator             ;                      IDs_prime, IDs
+Keyword               while                  DeclarationList_prime, StatementList, Statement, While
 Separator             (                      
 Identifier            fahr                   Condition, Expression, Term, Factor, Primary
 Operator              <=                     ExpressionPrime, Term, Factor, Primary, Relop

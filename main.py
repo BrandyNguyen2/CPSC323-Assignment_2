@@ -333,22 +333,33 @@ def OptDeclarationList():
     if switch:
         print(token + " " + "OptDeclarationList")
         rules_used.append("OptDeclarationList")
+    if token in {"integer", "boolean", "real"}:
+        DeclarationList()
 
 def DeclarationList():
     if switch:
         print(token + " " + "DeclarationList")
         rules_used.append("DeclarationList")
+    Declaration()
+    if token == ";":
+        lexer()
+        DeclarationList_prime()
 
 def DeclarationList_prime():
     if switch:
         print(token + " " + "DeclarationList_prime")
         rules_used.append("DeclarationList_prime")
+        
+    if token in {"int", "float", "bool"}:
+        DeclarationList()
 
 
 def Declaration():
     if switch:
         print(token + " " + "Declaration")
         rules_used.append("Declaration")
+    Qualifier()
+    IDs()
 
 def IDs():
     if switch:
@@ -362,7 +373,11 @@ def IDs_prime():
     if switch:
         print(token + " " + "IDs_prime")
         rules_used.append("IDs_prime")
-    IDs()
+    if token == ",":
+        lexer()
+        IDs()
+    else:
+         IDs()
     
 
 

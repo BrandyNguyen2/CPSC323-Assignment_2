@@ -3,5 +3,6 @@ function convert (fahr integer)
 return 5 * (fahr -32) + 5;
 }
 @
+integer low, high, step;
 while (fahr <= upper) a = 23.00;
 @
