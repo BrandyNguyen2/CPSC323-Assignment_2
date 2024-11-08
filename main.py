@@ -1,5 +1,5 @@
 # Programmers: Salvador Delgado, Brandy Nguyen, Landon Patam, & Nicholas Reeves
-import re
+import re, sys
 # Lists of Seperators, Operators and Keywords for later reference
 separators = ["(", ")", ";", "{", "}", "[", "]", ",", "@"]
 operators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", ">=", "<=", "and", "or", "not"]
@@ -8,6 +8,8 @@ keywords = ["while", "if", "for", "fi", "integer", "boolean", "real", "put", "fu
 # Takes text from input file and converts into a string with no spaces
 with open("input.txt", "r" ) as file:
      input = file.read()
+
+
 
 # Removes comments from the input string
 input = re.sub(r"\[\*.*?\*\]", "", input)
@@ -201,15 +203,14 @@ def lexer():
                 token_type = 'Identifier'
     else:
                 token_type = 'Unknown'
+
     with open("output.txt", "a") as file:
-
-
-
-        file.write(f"{token_type:<22}{token:<23}{', '.join(rules_used)}\n")
-        rules_used = []
-        tokens_index += 1
-        if tokens_index < len(tokens):
-            token = tokens[tokens_index]
+        if len(errors) == 0:
+            file.write(f"{token_type:<22}{token:<23}{', '.join(rules_used)}\n")
+            rules_used = []
+            tokens_index += 1
+            if tokens_index < len(tokens):
+                token = tokens[tokens_index]
 
     
 
@@ -221,12 +222,14 @@ def lexer():
 
 switch = True
 
-
+def Error():
+     with open("output.txt", "a") as file:
+          file.write(f"{errors[0]}")
 
 
 def Rat24F():
     if switch:
-        print(token + " " + "Rat24F")
+        #print(token + " " + "Rat24F")
         rules_used.append("Rat24F")
 
     OptFunctionDefinitions()
@@ -236,12 +239,20 @@ def Rat24F():
         StatementList()
         if token == "@":
             lexer()
+        else:
+             errors.append("EXPECTED OPENING @")
+             Error()
+             sys.exit()
+    else:
+        errors.append("EXPECTED CLOSING @")
+        Error()
+        sys.exit()
 
 
 
 def OptFunctionDefinitions():
     if switch:
-        print(token + " " + "OptFunctionDefinitions")
+        #print(token + " " + "OptFunctionDefinitions")
         rules_used.append("OptFunctionsDefinitions")
         if token == "function":
             FunctionDefinitions()
@@ -250,7 +261,7 @@ def OptFunctionDefinitions():
 
 def FunctionDefinitions():
     if switch:
-        print(token + " " + "FunctionDefinitions")
+        #print(token + " " + "FunctionDefinitions")
         rules_used.append("FunctionsDefinitions")
     Function()
     FunctionDefinitions_prime()
@@ -258,7 +269,7 @@ def FunctionDefinitions():
 
 def FunctionDefinitions_prime():
     if switch:
-        print(token + " " + "FunctionDefinitions_prime")
+        #print(token + " " + "FunctionDefinitions_prime")
         rules_used.append("FunctionsDefintions_prime")
     if token == "function":
         FunctionDefinitions()
@@ -266,7 +277,7 @@ def FunctionDefinitions_prime():
 
 def Function():
     if switch:
-        print(token + " " + "Function")
+        #print(token + " " + "Function")
         rules_used.append("Function")
     if token == 'function':
         lexer()
@@ -279,23 +290,35 @@ def Function():
                     lexer()
                     OptDeclarationList()
                     Body()
+                else:
+                    errors.append("EXPECTED CLOSING )")
+                    Error()
+                    sys.exit()
+            else:
+                 errors.append("EXPECTED OPENING (")
+                 Error()
+                 sys.exit()
+        else:
+             errors.append("EXPECTED IDENTIFIER")
+             Error()
+             sys.exit()         
 
 def OptParameterList():
     if switch:
-        print(token + " " + "OptParameterList")
+        #print(token + " " + "OptParameterList")
         rules_used.append("OptParamaterList")
         ParameterList()
 
 def ParameterList():
     if switch:
-        print(token + " " + "ParameterList")
+        #print(token + " " + "ParameterList")
         rules_used.append("ParamaterList")
     Parameter()
     ParameterListPrime()
 
 def ParameterListPrime():
     if switch:
-        print(token + " " + "ParameterListPrime")
+        #print(token + " " + "ParameterListPrime")
         rules_used.append("ParamaterListPrime")
     if token == ",":
         lexer()
@@ -304,7 +327,7 @@ def ParameterListPrime():
 
 def Parameter():
     if switch:
-        print(token + " " + "Parameter")
+        #print(token + " " + "Parameter")
         rules_used.append("Paramater")
     if isIdentifier(token):
         IDs()
@@ -313,32 +336,39 @@ def Parameter():
 
 def Qualifier():
     if switch:
-        print(token + " " + "Qualifier")
+        #print(token + " " + "Qualifier")
         rules_used.append("Qualifier")
     if (isInteger(token) or isReal(token) or (isinstance(token, bool))):
         lexer()
 
 def Body():
     if switch:
-        print(token + " " + "Body")
+        #print(token + " " + "Body")
         rules_used.append("Body")
         if token == "{":
             lexer()
             StatementList()
             if token == "}":
                  lexer()
-            
+            else:
+                 errors.append("EXPECTED }")
+                 Error()
+                 sys.exit()
+        else:
+             errors.append("EXPECTED {")
+             Error()
+             sys.exit()
 
 def OptDeclarationList():
     if switch:
-        print(token + " " + "OptDeclarationList")
+        #print(token + " " + "OptDeclarationList")
         rules_used.append("OptDeclarationList")
     if token in {"integer", "boolean", "real"}:
         DeclarationList()
 
 def DeclarationList():
     if switch:
-        print(token + " " + "DeclarationList")
+        #print(token + " " + "DeclarationList")
         rules_used.append("DeclarationList")
     Declaration()
     if token == ";":
@@ -347,7 +377,7 @@ def DeclarationList():
 
 def DeclarationList_prime():
     if switch:
-        print(token + " " + "DeclarationList_prime")
+        #print(token + " " + "DeclarationList_prime")
         rules_used.append("DeclarationList_prime")
         
     if token in {"int", "float", "bool"}:
@@ -356,14 +386,14 @@ def DeclarationList_prime():
 
 def Declaration():
     if switch:
-        print(token + " " + "Declaration")
+        #print(token + " " + "Declaration")
         rules_used.append("Declaration")
     Qualifier()
     IDs()
 
 def IDs():
     if switch:
-        print(token + " " + "IDs")
+        #print(token + " " + "IDs")
         rules_used.append("IDs")
     if isIdentifier(token):
         lexer()
@@ -371,7 +401,7 @@ def IDs():
 
 def IDs_prime():
     if switch:
-        print(token + " " + "IDs_prime")
+        #print(token + " " + "IDs_prime")
         rules_used.append("IDs_prime")
     if token == ",":
         lexer()
@@ -383,14 +413,14 @@ def IDs_prime():
 
 def StatementList():
     if switch:
-        print(token + " " + "StatementList")
+        #print(token + " " + "StatementList")
         rules_used.append("StatementList")
     Statement()
     StatementList_prime()
 
 def StatementList_prime():
     if switch:
-        print(token + " " + "StatementList_prime")
+        #print(token + " " + "StatementList_prime")
         rules_used.append("StatementList_prime")
         if token in {"if", "return", "put", "get", "while"} or isIdentifier(token):
             #lexer()
@@ -398,7 +428,7 @@ def StatementList_prime():
 
 def Statement():
     if switch:
-        print(token + " " + "Statement")
+        #print(token + " " + "Statement")
         rules_used.append("Statement")
         if token == '{':
             Compound()
@@ -417,17 +447,25 @@ def Statement():
 
 def Compound():
     if switch:
-        print(token + " " + "Compound")
+        #print(token + " " + "Compound")
         rules_used.append("Compound")
         if token == "{":
              lexer()
              StatementList()
              if token == "}":
                   lexer()
+             else:
+                  errors.append("EXPECTED }")
+                  Error()
+                  sys.exit()
+        else:
+             errors.append("EXPECTED {")
+             Error()
+             sys.exit()
 
 def Assign():
     if switch:
-        print(token + " " + "Assign")
+        #print(token + " " + "Assign")
         rules_used.append("Assign")
     if isIdentifier(token):
         lexer()
@@ -436,10 +474,18 @@ def Assign():
             Expression()
             if token == ';':
                 lexer()
+            else:
+                 errors.append("EXPECTED ;")
+                 Error()
+                 sys.exit()
+        else:
+             errors.append("EXPECTED =")
+             Error()
+             sys.exit()
 
 def If():
     if switch:
-        print(token + " " + "If")
+        #print(token + " " + "If")
         rules_used.append("If")
     if token == "if":
         lexer()
@@ -451,19 +497,23 @@ def If():
                 Statement()
                 If_prime()
             else:
-                print("Error: Expected ')' at end of condition in if statement")
+                errors.append("EXPECTED )")
+                Error()
+                sys.exit()
         else:
-            print("Error: Expected '(' after 'if'")
+            errors.append("EXPECTED ( ")
+            Error()
+            sys.exit()
 
 
 def If_prime():
     if switch:
-        print("If_prime")
+        #print("If_prime")
         rules_used.append("If_prime")
 
 def Return():
     if switch:
-        print("Return")
+        #print("Return")
         rules_used.append("Return")
         if token == "return":
              lexer()
@@ -473,10 +523,14 @@ def Return():
                   Expression()
                   if token == ";":
                        lexer()
+                  else:
+                       errors.append("EXPECTED ;")
+                       Error()
+                       sys.exit()
 
 def Return_prime():
     if switch:
-        print("Return_prime")
+        #print("Return_prime")
         rules_used.append("Return_prime")
     if token == ";":
          lexer()
@@ -484,24 +538,42 @@ def Return_prime():
          Expression()
          if token == ";":
             lexer()
+         else:
+              errors.append("EXPECTED ;")
+              Error()
+              sys.exit()
+
 
 def Print():
     if switch:
-        print("Print")
+        #print("Print")
         rules_used.append("Print")
     if token == "put":
-         lexer()
-         if token == "(":
-              lexer()
-              Expression()
-              if token == ")":
-                   lexer()
-                   if token == ";":
-                        lexer()
+        lexer()
+        if token == "(":
+            lexer()
+            Expression()
+            if token == ")":
+                lexer()
+                if token == ";":
+                    lexer()
+                else:
+                    errors.append("EXPECTED :")
+                    Error()
+                    sys.exit()
+            else:
+                 errors.append("EXPECTED )")
+                 Error()
+                 sys.exit()
+        else:
+             errors.append("EXPECTED (")
+             Error()
+             sys.exit()
+                
 
 def Scan():
     if switch:
-        print("Scan")
+        #print("Scan")
         rules_used.append("Scan")
     if token == "get":
          lexer()
@@ -515,20 +587,28 @@ def Scan():
 
 def While():
     if switch:
-        print("While")
+        #print("While")
         rules_used.append("While")
     if token == "while":
-         lexer()
-         if token == "(":
-              lexer()
-              Condition()
-              if token == ")":
-                   lexer()
-                   Statement()
+        lexer()
+        if token == "(":
+            lexer()
+            Condition()
+            if token == ")":
+                lexer()
+                Statement()
+            else:
+                 errors.append("EXPECTED )")
+                 Error()
+                 sys.exit()
+        else:
+             errors.append("EXPECTED (")
+             Error()
+             sys.exit()
 
 def Condition():
     if switch:
-        print("Condition")
+        #print("Condition")
         rules_used.append("Condition")
     Expression()
     Relop()
@@ -536,7 +616,7 @@ def Condition():
 
 def Relop():
     if switch:
-        print("Relop")
+        #print("Relop")
         rules_used.append("Relop")
         if token == "==":
              lexer()
@@ -554,7 +634,7 @@ def Relop():
 
 def Expression():
     if switch:
-        print(token + " " + "Expression")
+        #print(token + " " + "Expression")
         rules_used.append("Expression")
     Term()
     ExpressionPrime()
@@ -562,7 +642,7 @@ def Expression():
 
 def ExpressionPrime():
     if switch:
-        print(token + " " + "ExpressionPrime")
+        #print(token + " " + "ExpressionPrime")
         rules_used.append("ExpressionPrime")
     if token == "+":
          lexer()
@@ -579,7 +659,7 @@ def ExpressionPrime():
 
 def Term():
     if switch:
-        print(token + " " + "Term")
+        #print(token + " " + "Term")
         rules_used.append("Term")
 
     Factor()
@@ -588,7 +668,8 @@ def Term():
 
 def TermPrime():
     if switch:
-        print(token + " " + "TermPrime")
+        #print(token + " " + "TermPrime")
+        rules_used.append("TermPrime")
     if token == "*":
          lexer()
          Factor()
@@ -601,7 +682,7 @@ def TermPrime():
 
 def Factor():
     if switch:
-        print(token + " " + "Factor")
+        #print(token + " " + "Factor")
         rules_used.append("Factor")
 
     if token == "-":
@@ -614,7 +695,7 @@ def Factor():
 
 def Primary():
     if switch:
-        print("Primary")
+        #print("Primary")
         rules_used.append("Primary")
     if isIdentifier(token):
          lexer()
@@ -622,6 +703,8 @@ def Primary():
               IDs()
               if token == ")":
                    lexer()
+                   
+            
     elif isInteger(token):
          lexer()
     elif token == "(":
@@ -639,7 +722,8 @@ def Primary():
 
 def Empty():
     if switch:
-        print("Empty")
+         rules_used.append("Empty")
+        #print("Empty")
 
 
 Rat24F()

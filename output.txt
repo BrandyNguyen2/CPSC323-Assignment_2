@@ -10,15 +10,15 @@ Separator             )                      IDs_prime, IDs, Qualifier, Paramate
 Separator             {                      OptDeclarationList, Body
 Keyword               return                 StatementList, Statement, Return
 Integer               5                      Expression, Term, Factor, Primary
-Operator              *                      
+Operator              *                      TermPrime
 Separator             (                      Factor, Primary
 Identifier            fahr                   Expression, Term, Factor, Primary
-Operator              -                      ExpressionPrime
+Operator              -                      TermPrime, ExpressionPrime
 Integer               32                     Term, Factor, Primary
-Separator             )                      ExpressionPrime, Term, Factor, Primary
-Operator              /                      
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Operator              /                      TermPrime
 Integer               9                      Factor, Primary
-Separator             ;                      ExpressionPrime, Term, Factor, Primary
+Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             }                      StatementList_prime
 Separator             @                      FunctionsDefintions_prime
 Keyword               integer                OptDeclarationList, DeclarationList, Declaration, Qualifier, IDs
@@ -40,28 +40,28 @@ Separator             ;
 Keyword               while                  StatementList_prime, StatementList, Statement, While
 Separator             (                      
 Identifier            low                    Condition, Expression, Term, Factor, Primary
-Operator              <=                     ExpressionPrime, Term, Factor, Primary, Relop
+Operator              <=                     TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime, Relop
 Identifier            high                   Expression, Term, Factor, Primary
-Separator             )                      ExpressionPrime, Term, Factor, Primary
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             {                      Statement, Compound
 Keyword               put                    StatementList, Statement, Print
 Separator             (                      
 Identifier            low                    Expression, Term, Factor, Primary
-Separator             )                      ExpressionPrime, Term, Factor, Primary
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             ;                      
 Keyword               put                    StatementList_prime, StatementList, Statement, Print
 Separator             (                      
 Identifier            convert                Expression, Term, Factor, Primary
-Separator             (                      IDs, ExpressionPrime, Term, Factor, Primary
+Separator             (                      IDs, TermPrime, ExpressionPrime, Term, Factor, Primary
 Identifier            low                    Expression, Term, Factor, Primary
-Separator             )                      ExpressionPrime, Term, Factor, Primary
-Separator             )                      
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Separator             )                      TermPrime
 Separator             ;                      
 Identifier            low                    StatementList_prime, StatementList, Statement, Assign
 Operator              =                      
 Identifier            low                    Expression, Term, Factor, Primary
-Operator              +                      ExpressionPrime
+Operator              +                      TermPrime, ExpressionPrime
 Identifier            step                   Term, Factor, Primary
-Separator             ;                      ExpressionPrime, Term, Factor, Primary
+Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             }                      StatementList_prime
 Separator             @                      StatementList_prime
