@@ -7,8 +7,8 @@ keywords = ["while", "if", "for", "fi", "integer", "boolean", "real", "put", "fu
 
 
 # CHANGE THESE 2 TO CHANGE INPUT / OUTPUT FILES
-Input_file = "input3.txt"
-Output_file = "output3.txt"
+Input_file = "input.txt"
+Output_file = "output.txt"
 
 
 # Takes text from input file and converts into a string with no spaces
@@ -495,6 +495,8 @@ def StatementList_prime():
         if token in {"if", "return", "put", "get", "while"} or isIdentifier(token):
             #lexer()
             StatementList()
+        else:
+            Empty()
 
 def Statement():
     if switch:
