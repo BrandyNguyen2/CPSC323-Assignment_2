@@ -6,10 +6,10 @@ Identifier            convert
 Separator             (                      
 Identifier            fahr                   OptParamaterList, ParamaterList, Paramater, IDs
 Keyword               integer                IDs_prime, IDs
-Separator             )                      IDs_prime, IDs, Qualifier, ParamaterListPrime
-Separator             {                      OptDeclarationList, Body
+Separator             )                      IDs_prime, IDs, Qualifier, ParamaterListPrime, Empty
+Separator             {                      OptDeclarationList, Empty, Body
 Keyword               return                 StatementList, Statement, Return
-Integer               5                      Expression, Term, Factor, Primary
+Integer               5                      Return_prime, Expression, Term, Factor, Primary
 Operator              *                      TermPrime
 Separator             (                      Factor, Primary
 Identifier            fahr                   Expression, Term, Factor, Primary
@@ -20,15 +20,8 @@ Operator              /                      TermPrime
 Integer               9                      Factor, Primary
 Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             }                      StatementList_prime
-Separator             @                      FunctionsDefintions_prime
-Keyword               integer                OptDeclarationList, DeclarationList, Declaration, Qualifier, IDs
-Identifier            low                    IDs_prime, IDs
-Separator             ,                      IDs_prime
-Identifier            high                   IDs
-Separator             ,                      IDs_prime
-Identifier            step                   IDs
-Separator             ;                      IDs_prime, IDs
-Keyword               get                    DeclarationList_prime, StatementList, Statement, Scan
+Separator             @                      FunctionsDefintions_prime, Empty
+Keyword               get                    OptDeclarationList, Empty, StatementList, Statement, Scan
 Separator             (                      
 Identifier            low                    IDs
 Separator             ,                      IDs_prime

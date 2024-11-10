@@ -5,8 +5,14 @@ separators = ["(", ")", ";", "{", "}", "[", "]", ",", "@"]
 operators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", ">=", "<=", "and", "or", "not"]
 keywords = ["while", "if", "for", "fi", "integer", "boolean", "real", "put", "function", "return", "get", "true", "false", "else", "elif", "main"]
 
+
+# CHANGE THESE 2 TO CHANGE INPUT / OUTPUT FILES
+Input_file = "input3.txt"
+Output_file = "output3.txt"
+
+
 # Takes text from input file and converts into a string with no spaces
-with open("input3.txt", "r" ) as file:
+with open(Input_file, "r" ) as file:
      input = file.read()
 
 
@@ -14,6 +20,8 @@ with open("input3.txt", "r" ) as file:
 
 # Removes comments from the input string
 input = re.sub(r"\[\*.*?\*\]", "", input)
+
+#print (input)
 
 
 # Instantiating list for Tokens
@@ -187,10 +195,14 @@ def isIdentifier(token):
 
 # SYNTACTICAL ANALYZER PORTION
 
-with open ("output3.txt", "w") as file:
+
+
+
+with open (Output_file, "w") as file:
         file.write(f'Output:\nToken{" "*17}{"Lexeme":<23}{"Production Rules"}\n{"-"*9}{" "*13}{"-"*8}{" "*15}{"-"*20}\n')
 
-switch = True
+switch = False
+AddToList = True
 
 tokens_index = 0
 line_number = 1
@@ -220,7 +232,7 @@ def lexer():
     else:
                 token_type = 'Unknown'
 
-    with open("output3.txt", "a") as file:
+    with open(Output_file, "a") as file:
         if len(errors) == 0:
             file.write(f"{token_type:<22}{token:<23}{', '.join(rules_used)}\n")
             rules_used = []
@@ -229,24 +241,28 @@ def lexer():
                 token = tokens[tokens_index]
 
     if token == "\n":
-        tokens_index += 1
-        token = tokens[tokens_index]
-        line_number += 1
+        while token == "\n":
+            tokens_index += 1
+            if tokens_index < len(tokens):
+                token = tokens[tokens_index]
+                line_number += 1
+            else:
+                break
 
 
 
-
-switch = True
 
 def Error():
-     with open("output3.txt", "a") as file:
+     with open(Output_file, "a") as file:
           file.write(f"\nERROR ON LINE {line_number} - {errors[0]}")
 
 
 def Rat24F():
-    if switch:
-        #print(token + " " + "Rat24F")
+    if AddToList:
         rules_used.append("Rat24F")
+
+    if switch:
+          print(token + " " + "Rat24F")
 
     OptFunctionDefinitions()
     if token == "@":
@@ -256,11 +272,11 @@ def Rat24F():
         if token == "@":
             lexer()
         else:
-             errors.append("EXPECTED OPENING @")
-             Error()
-             sys.exit()
+            errors.append("EXPECTED CLOSING @")
+            Error()
+            sys.exit()
     else:
-        errors.append("EXPECTED CLOSING @")
+        errors.append("EXPECTED OPENING @")
         Error()
         sys.exit()
 
@@ -268,8 +284,11 @@ def Rat24F():
 
 def OptFunctionDefinitions():
     if switch:
-        #print(token + " " + "OptFunctionDefinitions")
+        print(token + " " + "OptFunctionDefinitions")
+       
+    if AddToList:
         rules_used.append("OptFunctionsDefinitions")
+
         if token == "function":
             FunctionDefinitions()
         else:
@@ -277,24 +296,35 @@ def OptFunctionDefinitions():
 
 def FunctionDefinitions():
     if switch:
-        #print(token + " " + "FunctionDefinitions")
+        print(token + " " + "FunctionDefinitions")
+        
+    if AddToList:
         rules_used.append("FunctionsDefinitions")
+
     Function()
     FunctionDefinitions_prime()
 
 
 def FunctionDefinitions_prime():
     if switch:
-        #print(token + " " + "FunctionDefinitions_prime")
+        print(token + " " + "FunctionDefinitions_prime")
+        
+    if AddToList:
         rules_used.append("FunctionsDefintions_prime")
+
     if token == "function":
         FunctionDefinitions()
+    else:
+         Empty()
 
 
 def Function():
     if switch:
-        #print(token + " " + "Function")
+        print(token + " " + "Function")
+
+    if AddToList:
         rules_used.append("Function")
+
     if token == 'function':
         lexer()
         if isIdentifier(token):
@@ -321,30 +351,37 @@ def Function():
 
 def OptParameterList():
     if switch:
-        #print(token + " " + "OptParameterList")
+        print(token + " " + "OptParameterList")
+    if AddToList:
         rules_used.append("OptParamaterList")
         ParameterList()
 
 def ParameterList():
     if switch:
-        #print(token + " " + "ParameterList")
-        rules_used.append("ParamaterList")
+        print(token + " " + "ParameterList")
+    if AddToList:
+         rules_used.append("ParamaterList")
+
     Parameter()
     ParameterListPrime()
 
 def ParameterListPrime():
     if switch:
-        #print(token + " " + "ParameterListPrime")
-        rules_used.append("ParamaterListPrime")
+        print(token + " " + "ParameterListPrime")
+    if AddToList:
+         rules_used.append("ParamaterListPrime")
+
     if token == ",":
         lexer()
         ParameterList()
-  
+    else:
+         Empty()
 
 def Parameter():
     if switch:
-        #print(token + " " + "Parameter")
-        rules_used.append("Paramater")
+        print(token + " " + "Parameter")
+    if AddToList:
+         rules_used.append("Paramater")
     if isIdentifier(token):
         IDs()
         Qualifier()
@@ -352,40 +389,49 @@ def Parameter():
 
 def Qualifier():
     if switch:
-        #print(token + " " + "Qualifier")
-        rules_used.append("Qualifier")
+        print(token + " " + "Qualifier")
+    if AddToList:
+          rules_used.append("Qualifier")
     if (isInteger(token) or isReal(token) or (isinstance(token, bool))):
         lexer()
 
 def Body():
     if switch:
-        #print(token + " " + "Body")
+        print(token + " " + "Body")
+    if AddToList:
         rules_used.append("Body")
-        if token == "{":
-            lexer()
-            StatementList()
-            if token == "}":
-                 lexer()
-            else:
-                 errors.append("EXPECTED }")
-                 Error()
-                 sys.exit()
+
+    if token == "{":
+        lexer()
+        StatementList()
+        if token == "}":
+                lexer()
         else:
-             errors.append("EXPECTED {")
-             Error()
-             sys.exit()
+            errors.append("EXPECTED }")
+            Error()
+            sys.exit()
+    else:
+        errors.append("EXPECTED {")
+        Error()
+        sys.exit()
 
 def OptDeclarationList():
     if switch:
-        #print(token + " " + "OptDeclarationList")
-        rules_used.append("OptDeclarationList")
+        print(token + " " + "OptDeclarationList")
+    if AddToList:
+         rules_used.append("OptDeclarationList")
+         
     if token in {"integer", "boolean", "real"}:
         DeclarationList()
+    else:
+        Empty()
 
 def DeclarationList():
     if switch:
-        #print(token + " " + "DeclarationList")
-        rules_used.append("DeclarationList")
+        print(token + " " + "DeclarationList")
+    if AddToList:
+         rules_used.append("DeclarationList")
+    
     Declaration()
     if token == ";":
         lexer()
@@ -393,23 +439,28 @@ def DeclarationList():
 
 def DeclarationList_prime():
     if switch:
-        #print(token + " " + "DeclarationList_prime")
+        print(token + " " + "DeclarationList_prime")
+    if AddToList:
         rules_used.append("DeclarationList_prime")
         
     if token in {"int", "float", "bool"}:
         DeclarationList()
+    else:
+         Empty()
 
 
 def Declaration():
     if switch:
-        #print(token + " " + "Declaration")
+        print(token + " " + "Declaration")
+    if AddToList:
         rules_used.append("Declaration")
     Qualifier()
     IDs()
 
 def IDs():
     if switch:
-        #print(token + " " + "IDs")
+        print(token + " " + "IDs")
+    if AddToList:
         rules_used.append("IDs")
     if isIdentifier(token):
         lexer()
@@ -417,7 +468,8 @@ def IDs():
 
 def IDs_prime():
     if switch:
-        #print(token + " " + "IDs_prime")
+        print(token + " " + "IDs_prime")
+    if AddToList:
         rules_used.append("IDs_prime")
     if token == ",":
         lexer()
@@ -429,14 +481,16 @@ def IDs_prime():
 
 def StatementList():
     if switch:
-        #print(token + " " + "StatementList")
+        print(token + " " + "StatementList")
+    if AddToList:
         rules_used.append("StatementList")
     Statement()
     StatementList_prime()
 
 def StatementList_prime():
     if switch:
-        #print(token + " " + "StatementList_prime")
+        print(token + " " + "StatementList_prime")
+    if AddToList:
         rules_used.append("StatementList_prime")
         if token in {"if", "return", "put", "get", "while"} or isIdentifier(token):
             #lexer()
@@ -444,26 +498,34 @@ def StatementList_prime():
 
 def Statement():
     if switch:
-        #print(token + " " + "Statement")
+        print(token + " " + "Statement")
+    if AddToList:
         rules_used.append("Statement")
-        if token == '{':
-            Compound()
-        elif token == 'if':
-            If()
-        elif token == 'return':
-            Return()
-        elif token == 'put':
-            Print()
-        elif token == 'get':
-            Scan()
-        elif token == 'while':
-            While()
-        elif isIdentifier(token):
-            Assign()
+
+    if token == '{':
+        Compound()
+    elif token == 'if':
+        If()
+    elif token == 'return':
+        Return()
+    elif token == 'put':
+        Print()
+    elif token == 'get':
+        Scan()
+    elif token == 'while':
+        While()
+    elif isIdentifier(token):
+        Assign()
+    else:
+        errors.append("MISSING STATEMENT")
+        Error()
+        sys.exit()
+        
 
 def Compound():
     if switch:
-        #print(token + " " + "Compound")
+        print(token + " " + "Compound")
+    if AddToList:
         rules_used.append("Compound")
         if token == "{":
              lexer()
@@ -481,7 +543,8 @@ def Compound():
 
 def Assign():
     if switch:
-        #print(token + " " + "Assign")
+        print(token + " " + "Assign")
+    if AddToList:
         rules_used.append("Assign")
     if isIdentifier(token):
         lexer()
@@ -501,7 +564,8 @@ def Assign():
 
 def If():
     if switch:
-        #print(token + " " + "If")
+        print(token + " " + "If")
+    if AddToList:
         rules_used.append("If")
     if token == "if":
         lexer()
@@ -524,29 +588,50 @@ def If():
 
 def If_prime():
     if switch:
-        #print("If_prime")
+        print("If_prime")
+    if AddToList:
         rules_used.append("If_prime")
+
+
+    if token == "fi":
+        lexer()
+    elif token == "else":
+         lexer()
+         Statement()
+         if token == "fi":
+            lexer()
+         else:
+            errors.append("EXPECTED fi")
+            Error()
+            sys.exit()
+    else:
+        errors.append("EXPECTED fi")
+        Error()
+        sys.exit()
 
 def Return():
     if switch:
-        #print("Return")
+        print("Return")
+    if AddToList:
         rules_used.append("Return")
         if token == "return":
              lexer()
-             if token == ";":
-                  lexer()
-             else:
-                  Expression()
-                  if token == ";":
-                       lexer()
-                  else:
-                       errors.append("EXPECTED ;")
-                       Error()
-                       sys.exit()
+             Return_prime()
+             #if token == ";":
+             #     lexer()
+             #else:
+             #     Expression()
+             #     if token == ";":
+             #          lexer()
+             #     else:
+             #          errors.append("EXPECTED ;")
+             #          Error()
+             #          sys.exit()
 
 def Return_prime():
     if switch:
-        #print("Return_prime")
+        print("Return_prime")
+    if AddToList:
         rules_used.append("Return_prime")
     if token == ";":
          lexer()
@@ -562,7 +647,8 @@ def Return_prime():
 
 def Print():
     if switch:
-        #print("Print")
+        print("Print")
+    if AddToList:
         rules_used.append("Print")
     if token == "put":
         lexer()
@@ -574,7 +660,7 @@ def Print():
                 if token == ";":
                     lexer()
                 else:
-                    errors.append("EXPECTED :")
+                    errors.append("EXPECTED ;")
                     Error()
                     sys.exit()
             else:
@@ -589,7 +675,8 @@ def Print():
 
 def Scan():
     if switch:
-        #print("Scan")
+        print("Scan")
+    if AddToList:
         rules_used.append("Scan")
     if token == "get":
          lexer()
@@ -600,13 +687,33 @@ def Scan():
                    lexer()
                    if token == ";":
                        lexer()
+                   else:
+                        errors.append("EXPECTED ;")
+                        Error()
+                        sys.exit()
+              else:
+                   errors.append("EXPECTED (")
+                   Error()
+                   sys.exit()
+         else:
+             errors.append("EXPECTED (")
+             Error()
+             sys.exit()
+             
 
 def While():
     if switch:
-        #print("While")
+        print("While")
+    if AddToList:
         rules_used.append("While")
+
+
     if token == "while":
         lexer()
+        #if token != "(":
+        #    errors.append("EXPECTED (")
+        #    Error()
+        #    sys.exit()
         if token == "(":
             lexer()
             Condition()
@@ -624,7 +731,8 @@ def While():
 
 def Condition():
     if switch:
-        #print("Condition")
+        print("Condition")
+    if AddToList:
         rules_used.append("Condition")
     Expression()
     Relop()
@@ -632,7 +740,8 @@ def Condition():
 
 def Relop():
     if switch:
-        #print("Relop")
+        print("Relop")
+    if AddToList:
         rules_used.append("Relop")
         if token == "==":
              lexer()
@@ -650,7 +759,8 @@ def Relop():
 
 def Expression():
     if switch:
-        #print(token + " " + "Expression")
+        print(token + " " + "Expression")
+    if AddToList:
         rules_used.append("Expression")
     Term()
     ExpressionPrime()
@@ -658,7 +768,8 @@ def Expression():
 
 def ExpressionPrime():
     if switch:
-        #print(token + " " + "ExpressionPrime")
+        print(token + " " + "ExpressionPrime")
+    if AddToList:
         rules_used.append("ExpressionPrime")
     if token == "+":
          lexer()
@@ -675,7 +786,8 @@ def ExpressionPrime():
 
 def Term():
     if switch:
-        #print(token + " " + "Term")
+        print(token + " " + "Term")
+    if AddToList:
         rules_used.append("Term")
 
     Factor()
@@ -684,7 +796,8 @@ def Term():
 
 def TermPrime():
     if switch:
-        #print(token + " " + "TermPrime")
+        print(token + " " + "TermPrime")
+    if AddToList:
         rules_used.append("TermPrime")
     if token == "*":
          lexer()
@@ -698,7 +811,8 @@ def TermPrime():
 
 def Factor():
     if switch:
-        #print(token + " " + "Factor")
+        print(token + " " + "Factor")
+    if AddToList:
         rules_used.append("Factor")
 
     if token == "-":
@@ -711,7 +825,8 @@ def Factor():
 
 def Primary():
     if switch:
-        #print("Primary")
+        print("Primary")
+    if AddToList:
         rules_used.append("Primary")
     if isIdentifier(token):
          lexer()
@@ -738,8 +853,10 @@ def Primary():
 
 def Empty():
     if switch:
+         print("Empty")
+    if AddToList:
          rules_used.append("Empty")
-        #print("Empty")
+        
 
 
 Rat24F()

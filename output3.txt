@@ -6,10 +6,10 @@ Identifier            convert
 Separator             (                      
 Identifier            fahr                   OptParamaterList, ParamaterList, Paramater, IDs
 Keyword               integer                IDs_prime, IDs
-Separator             )                      IDs_prime, IDs, Qualifier, ParamaterListPrime
-Separator             {                      OptDeclarationList, Body
+Separator             )                      IDs_prime, IDs, Qualifier, ParamaterListPrime, Empty
+Separator             {                      OptDeclarationList, Empty, Body
 Keyword               return                 StatementList, Statement, Return
-Integer               5                      Expression, Term, Factor, Primary
+Integer               5                      Return_prime, Expression, Term, Factor, Primary
 Operator              *                      TermPrime
 Separator             (                      Factor, Primary
 Identifier            fahr                   Expression, Term, Factor, Primary
@@ -20,7 +20,26 @@ Operator              /                      TermPrime
 Integer               9                      Factor, Primary
 Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             }                      StatementList_prime
-Separator             @                      FunctionsDefintions_prime
+Keyword               function               FunctionsDefintions_prime, FunctionsDefinitions, Function
+Identifier            compute                
+Separator             (                      
+Identifier            thingy                 OptParamaterList, ParamaterList, Paramater, IDs
+Keyword               real                   IDs_prime, IDs
+Separator             )                      IDs_prime, IDs, Qualifier, ParamaterListPrime, Empty
+Separator             {                      OptDeclarationList, Empty, Body
+Keyword               return                 StatementList, Statement, Return
+Integer               9                      Return_prime, Expression, Term, Factor, Primary
+Operator              /                      TermPrime
+Separator             (                      Factor, Primary
+Identifier            thingy                 Expression, Term, Factor, Primary
+Operator              +                      TermPrime, ExpressionPrime
+Integer               1005                   Term, Factor, Primary
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Operator              *                      TermPrime
+Integer               5                      Factor, Primary
+Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Separator             }                      StatementList_prime
+Separator             @                      FunctionsDefintions_prime, Empty
 Keyword               integer                OptDeclarationList, DeclarationList, Declaration, Qualifier, IDs
 Identifier            low                    IDs_prime, IDs
 Separator             ,                      IDs_prime
@@ -28,7 +47,7 @@ Identifier            high                   IDs
 Separator             ,                      IDs_prime
 Identifier            step                   IDs
 Separator             ;                      IDs_prime, IDs
-Keyword               get                    DeclarationList_prime, StatementList, Statement, Scan
+Keyword               get                    DeclarationList_prime, Empty, StatementList, Statement, Scan
 Separator             (                      
 Identifier            low                    IDs
 Separator             ,                      IDs_prime
@@ -40,7 +59,7 @@ Separator             ;
 Keyword               while                  StatementList_prime, StatementList, Statement, While
 Separator             (                      
 Identifier            low                    Condition, Expression, Term, Factor, Primary
-Operator              <=                     TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime, Relop
+Operator              !=                     TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime, Relop
 Identifier            high                   Expression, Term, Factor, Primary
 Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             {                      Statement, Compound
@@ -64,6 +83,29 @@ Operator              +                      TermPrime, ExpressionPrime
 Identifier            step                   Term, Factor, Primary
 Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
 Separator             }                      StatementList_prime
-Keyword               integer                StatementList_prime, StatementList, Statement, Assign
-
-ERROR ON LINE 14 - EXPECTED =
+Keyword               if                     StatementList_prime, StatementList, Statement, If
+Separator             (                      
+Identifier            low                    Condition, Expression, Term, Factor, Primary
+Operator              <                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime, Relop
+Identifier            high                   Expression, Term, Factor, Primary
+Separator             )                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Separator             {                      Statement, Compound
+Keyword               get                    StatementList, Statement, Scan
+Separator             (                      
+Identifier            thing                  IDs
+Separator             )                      IDs_prime, IDs
+Separator             ;                      
+Separator             }                      StatementList_prime
+Keyword               fi                     If_prime
+Identifier            step                   StatementList_prime, StatementList, Statement, Assign
+Operator              =                      
+Integer               5                      Expression, Term, Factor, Primary
+Operator              +                      TermPrime, ExpressionPrime
+Integer               5                      Term, Factor, Primary
+Separator             ;                      TermPrime, ExpressionPrime, Term, Factor, Primary, TermPrime
+Keyword               get                    StatementList_prime, StatementList, Statement, Scan
+Separator             (                      
+Identifier            step                   IDs
+Separator             )                      IDs_prime, IDs
+Separator             ;                      
+Separator             @                      StatementList_prime
