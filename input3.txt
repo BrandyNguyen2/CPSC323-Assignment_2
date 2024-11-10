@@ -1,0 +1,32 @@
+function convert(fahr integer)
+{
+return 5 * (fahr - 32) / 9;
+}
+@
+integer low, high, step;
+get(low, high, step);
+while (low <= high)
+{
+put(low);
+put(convert(low));
+low = low + step;
+}
+integer low2 = 0;
+integer high2 = 100; 
+integer step2 = 10;
+while (low2 <= high2)
+{
+put(low2);
+put(convert(low2));
+low2 = low2 + step2;
+}
+integer low3 = -40;
+integer high3 = 50;
+integer step3 = 15;
+while (low3 <= high3)
+{
+put(low3);
+put(convert(low3));
+low3 = low3 + step3;
+}
+@

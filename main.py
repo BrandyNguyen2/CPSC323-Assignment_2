@@ -6,7 +6,7 @@ operators = ["+", "-", "*", "/", "=", "==", "!=", "<", ">", ">=", "<=", "and", "
 keywords = ["while", "if", "for", "fi", "integer", "boolean", "real", "put", "function", "return", "get", "true", "false", "else", "elif", "main"]
 
 # Takes text from input file and converts into a string with no spaces
-with open("input.txt", "r" ) as file:
+with open("input3.txt", "r" ) as file:
      input = file.read()
 
 
@@ -187,7 +187,7 @@ def isIdentifier(token):
 
 # SYNTACTICAL ANALYZER PORTION
 
-with open ("output.txt", "w") as file:
+with open ("output3.txt", "w") as file:
         file.write(f'Output:\nToken{" "*17}{"Lexeme":<23}{"Production Rules"}\n{"-"*9}{" "*13}{"-"*8}{" "*15}{"-"*20}\n')
 
 switch = True
@@ -220,7 +220,7 @@ def lexer():
     else:
                 token_type = 'Unknown'
 
-    with open("output.txt", "a") as file:
+    with open("output3.txt", "a") as file:
         if len(errors) == 0:
             file.write(f"{token_type:<22}{token:<23}{', '.join(rules_used)}\n")
             rules_used = []
@@ -239,7 +239,7 @@ def lexer():
 switch = True
 
 def Error():
-     with open("output.txt", "a") as file:
+     with open("output3.txt", "a") as file:
           file.write(f"\nERROR ON LINE {line_number} - {errors[0]}")
 
 
@@ -423,7 +423,7 @@ def IDs_prime():
         lexer()
         IDs()
     else:
-         IDs()
+        IDs()
     
 
 
