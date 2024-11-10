@@ -66,4 +66,4 @@ Separator             ;                      TermPrime, ExpressionPrime, Term, F
 Separator             }                      StatementList_prime
 Keyword               integer                StatementList_prime, StatementList, Statement, Assign
 
-ERROR ON LINE 14 - EXPECTED '=' AFTER IDENTIFIER
+ERROR ON LINE 14 - EXPECTED =
